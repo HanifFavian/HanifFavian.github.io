@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hanif Favian — Web Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   DESIGN SYSTEM — Business: Black × Red × White
+══════════════════════════════════════════ */
+:root {
+  --black:   #0a0a0a;
+  --dark:    #111111;
+  --dark2:   #1a1a1a;
+  --red:     #c8102e;
+  --red2:    #e8112f;
+  --red-dim: rgba(200,16,46,0.15);
+  --white:   #ffffff;
+  --off-white: #f5f5f3;
+  --gray:    #999999;
+  --gray2:   #666666;
+  --border:  #2a2a2a;
+  --border-light: #e8e8e8;
+  --shadow:  0 8px 40px rgba(0,0,0,0.45);
+  --radius:  12px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--black);
+  color: var(--white);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ══════════════════════════════════════════
+   CUSTOM CURSOR — Crosshair + Magnetic Orb
+══════════════════════════════════════════ */
+* { cursor: none !important; }
+.cur-cross {
+  position: fixed; z-index: 9999; pointer-events: none;
+  width: 20px; height: 20px;
+  transform: translate(-50%, -50%);
+  will-change: left, top;
+}
+.cur-cross::before,
+.cur-cross::after {
+  content: ''; position: absolute; background: #ffffff;
+}
+.cur-cross::before { width: 1.5px; height: 20px; left: 50%; top: 0; transform: translateX(-50%); }
+.cur-cross::after  { width: 20px; height: 1.5px; top: 50%; left: 0; transform: translateY(-50%); }
+
+.cur-orb {
+  position: fixed; z-index: 9997; pointer-events: none;
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 1px solid rgba(200,16,46,0.55);
+  transform: translate(-50%, -50%);
+  transition: width 0.4s cubic-bezier(0.25,1,0.5,1),
+              height 0.4s cubic-bezier(0.25,1,0.5,1),
+              border-color 0.25s, background 0.3s;
+  will-change: left, top;
+}
+.cur-orb.hover {
+  width: 60px; height: 60px;
+  border-color: rgba(200,16,46,1);
+  background: rgba(200,16,46,0.07);
+}
+.cur-spark {
+  position: fixed; z-index: 9996; pointer-events: none;
+  border-radius: 50%; background: var(--red);
+  transform: translate(-50%, -50%);
+}
+
+/* ══════════════════════════════════════════
+   HOME TEXT ANIMATION (click wave)
+══════════════════════════════════════════ */
+.home-name .char {
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s;
+  cursor: default;
+}
+.home-name .char.wave {
+  animation: charWave 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes charWave {
+  0%   { transform: translateY(0) rotate(0deg); }
+  30%  { transform: translateY(-22px) rotate(-8deg); color: var(--red); }
+  60%  { transform: translateY(6px) rotate(4deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+.home-tagline, .home-desc {
+  cursor: default;
+}
+.home-tagline:active, .home-desc:active {
+  transform: scale(0.98);
+}
+.home-btns .btn-red, .home-btns .btn-outline {
+  position: relative; overflow: hidden;
+}
+.home-btns .btn-red::after, .home-btns .btn-outline::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(255,255,255,0.15);
+  transform: translateX(-100%) skewX(-15deg);
+  transition: transform 0.4s ease;
+}
+.home-btns .btn-red:active::after, .home-btns .btn-outline:active::after {
+  transform: translateX(100%) skewX(-15deg);
+}
+
+/* ══════════════════════════════════════════
+   NAVBAR
+══════════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(10,10,10,0.96);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  height: 68px;
+}
+.nav-inner {
+  max-width: 1140px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 100%;
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem; font-weight: 900;
+  color: var(--white); text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.nav-logo em { color: var(--red); font-style: normal; }
+
+.nav-links { display: flex; gap: 4px; list-style: none; }
+.nav-links a {
+  display: block;
+  font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gray); text-decoration: none;
+  padding: 8px 16px; border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+  position: relative;
+  cursor: pointer;
+}
+.nav-links a:hover { color: var(--white); background: var(--dark2); }
+.nav-links a.active {
+  color: var(--white);
+  background: var(--red);
+}
+
+.burger {
+  display: none; flex-direction: column; gap: 5px;
+  background: none; border: none; cursor: pointer; padding: 4px;
+}
+.burger span {
+  display: block; width: 24px; height: 2px;
+  background: var(--white); border-radius: 2px; transition: all 0.3s;
+}
+
+/* ══════════════════════════════════════════
+   PAGE SYSTEM — Multi-page SPA
+══════════════════════════════════════════ */
+.page {
+  display: none;
+  min-height: 100vh;
+  padding-top: 68px;
+  animation: pageIn 0.5s ease both;
+}
+.page.active { display: block; }
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.section-wrap {
+  max-width: 1140px; margin: 0 auto; padding: 72px 32px 80px;
+}
+
+/* ══════════════════════════════════════════
+   TYPOGRAPHY UTILS
+══════════════════════════════════════════ */
+.label {
+  font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--red); font-weight: 600; margin-bottom: 10px;
+  display: block;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900; line-height: 1.1;
+  margin-bottom: 56px;
+}
+.section-title em { color: var(--red); font-style: normal; }
+
+/* ══════════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════════ */
+.btn-red {
+  display: inline-block;
+  background: var(--red); color: var(--white);
+  border: none; border-radius: 4px;
+  padding: 14px 32px; font-size: 0.88rem; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  cursor: pointer; text-decoration: none;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.btn-red:hover {
+  background: var(--red2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(200,16,46,0.45);
+}
+.btn-outline {
+  display: inline-block;
+  background: transparent; color: var(--white);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 4px;
+  padding: 13px 30px; font-size: 0.88rem; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  cursor: pointer; text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-outline:hover {
+  border-color: var(--red); color: var(--red);
+  transform: translateY(-2px);
+}
+
+/* ══════════════════════════════════════════
+   PAGE 1 — HOME
+══════════════════════════════════════════ */
+#page-home {
+  background: var(--black);
+  position: relative; overflow: hidden;
+}
+
+.home-bg-circle {
+  position: absolute; top: -180px; right: -180px;
+  width: 520px; height: 520px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(200,16,46,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.home-grid {
+  display: grid; grid-template-columns: 1fr 440px;
+  gap: 60px; align-items: center;
+  min-height: calc(100vh - 68px);
+  max-width: 1140px; margin: 0 auto; padding: 60px 32px;
+}
+.home-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--red); border: 1px solid rgba(200,16,46,0.4);
+  padding: 6px 16px; border-radius: 2px; margin-bottom: 28px;
+  animation: fadeUp 0.7s ease both;
+}
+.home-tag::before { content: ''; width: 20px; height: 1px; background: var(--red); }
+.home-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3.5rem, 7vw, 6.5rem);
+  font-weight: 900; line-height: 0.95;
+  letter-spacing: -0.03em; margin-bottom: 20px;
+  animation: fadeUp 0.8s 0.1s ease both;
+}
+.home-name .red { color: var(--red); }
+.home-name .stroke {
+  -webkit-text-stroke: 2px var(--white);
+  color: transparent;
+}
+.home-tagline {
+  font-size: 1.05rem; color: var(--gray); font-weight: 300;
+  margin-bottom: 22px; letter-spacing: 0.02em;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+.home-divider {
+  width: 60px; height: 2px; background: var(--red); margin-bottom: 22px;
+  animation: fadeUp 0.8s 0.25s ease both;
+}
+.home-desc {
+  font-size: 0.95rem; color: var(--gray); line-height: 1.85;
+  max-width: 480px; margin-bottom: 40px;
+  animation: fadeUp 0.8s 0.3s ease both;
+}
+.home-btns {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  animation: fadeUp 0.8s 0.4s ease both;
+}
+.home-stats {
+  display: flex; gap: 40px; margin-top: 52px; padding-top: 32px;
+  border-top: 1px solid var(--border);
+  animation: fadeUp 0.8s 0.5s ease both;
+}
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem; font-weight: 900; color: var(--red); line-height: 1;
+}
+.stat-label { font-size: 0.75rem; color: var(--gray); margin-top: 4px; letter-spacing: 0.06em; }
+
+.home-photo-side {
+  display: flex; align-items: center; justify-content: center;
+  animation: fadeLeft 1s 0.2s ease both;
+}
+.photo-box {
+  position: relative; width: 380px; height: 450px;
+}
+.photo-box::before {
+  content: ''; position: absolute;
+  top: 16px; left: 16px; right: -16px; bottom: -16px;
+  border: 2px solid var(--red); border-radius: var(--radius);
+  opacity: 0.5; z-index: 0;
+}
+.photo-box::after {
+  content: 'HF';
+  position: absolute; bottom: -20px; right: -20px;
+  font-family: 'Playfair Display', serif;
+  font-size: 5rem; font-weight: 900; color: var(--red);
+  opacity: 0.07; z-index: 0; line-height: 1;
+}
+.photo-box img {
+  width: 100%; height: 100%; object-fit: cover; object-position: top center;
+  border-radius: var(--radius); position: relative; z-index: 1;
+  filter: grayscale(20%) contrast(1.05);
+  transition: filter 0.4s;
+}
+.photo-box:hover img { filter: grayscale(0%) contrast(1); }
+.photo-badge {
+  position: absolute; bottom: 24px; left: -24px; z-index: 2;
+  background: var(--red); color: var(--white);
+  padding: 12px 20px; border-radius: 6px;
+  font-size: 0.8rem; font-weight: 600;
+  box-shadow: var(--shadow);
+}
+
+/* ══════════════════════════════════════════
+   PAGE 2 — ABOUT
+══════════════════════════════════════════ */
+#page-about { background: var(--dark); }
+.about-layout {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 28px;
+}
+.about-card {
+  background: var(--dark2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 30px 28px;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+.about-card:hover {
+  border-color: var(--red); transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(200,16,46,0.12);
+}
+.about-card.full { grid-column: span 2; }
+.card-icon-wrap {
+  width: 44px; height: 44px; border-radius: 8px;
+  background: var(--red-dim); display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; margin-bottom: 16px;
+}
+.card-label {
+  font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--red); font-weight: 600; margin-bottom: 10px;
+}
+.card-body { font-size: 0.9rem; color: #bbbbbb; line-height: 1.8; }
+.card-body strong { color: var(--white); }
+
+.edu-list { display: flex; flex-direction: column; gap: 14px; }
+.edu-row { display: flex; gap: 16px; align-items: flex-start; }
+.edu-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--red); margin-top: 5px; flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(200,16,46,0.5);
+}
+.edu-year { font-size: 0.72rem; color: var(--red); font-weight: 600; margin-bottom: 2px; }
+.edu-name { font-size: 0.9rem; color: var(--white); font-weight: 500; }
+
+/* ══════════════════════════════════════════
+   PAGE 3 — SKILLS
+══════════════════════════════════════════ */
+#page-skills { background: var(--black); }
+.skills-layout {
+  display: grid; grid-template-columns: 380px 1fr; gap: 80px; align-items: center;
+}
+.skills-intro .intro-text {
+  font-size: 0.95rem; color: var(--gray); line-height: 1.85; margin-bottom: 20px;
+}
+.skills-intro .accent-box {
+  border-left: 3px solid var(--red); padding-left: 20px;
+  font-size: 1rem; color: var(--white); font-style: italic; line-height: 1.6;
+  margin-top: 32px;
+}
+
+.skill-list { display: flex; flex-direction: column; gap: 32px; }
+.skill-row {}
+.skill-top {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 10px;
+}
+.skill-name { font-size: 0.88rem; font-weight: 600; color: var(--white); }
+.skill-num { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 900; color: var(--red); }
+.skill-track {
+  height: 5px; background: var(--border); border-radius: 99px; overflow: hidden;
+  position: relative;
+}
+.skill-fill {
+  height: 100%; border-radius: 99px; width: 0;
+  background: linear-gradient(90deg, var(--red) 0%, #ff3355 100%);
+  transition: width 1.4s cubic-bezier(0.25, 1, 0.5, 1);
+  position: relative;
+}
+.skill-fill::after {
+  content: '';
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #ff3355;
+  box-shadow: 0 0 10px rgba(255,51,85,0.8);
+  opacity: 0; transition: opacity 0.3s 1.2s;
+}
+.skill-fill.animated::after { opacity: 1; }
+
+/* ══════════════════════════════════════════
+   PAGE 4 — PORTFOLIO
+══════════════════════════════════════════ */
+#page-portfolio { background: var(--dark); }
+.portfolio-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px;
+}
+.port-card-center {
+  grid-column: 1 / -1;
+  display: flex; justify-content: center;
+}
+.port-card-center .port-card {
+  max-width: 480px; width: 100%;
+}
+.port-card {
+  background: var(--dark2); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  text-decoration: none; color: inherit; display: block;
+  transition: transform 0.35s, border-color 0.35s, box-shadow 0.35s;
+}
+.port-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--red);
+  box-shadow: 0 20px 60px rgba(200,16,46,0.2);
+}
+.port-imgs { display: flex; height: 240px; overflow: hidden; position: relative; }
+.port-imgs img {
+  width: 50%; height: 100%; object-fit: cover; object-position: center;
+  transition: transform 0.5s ease; flex-shrink: 0;
+}
+.port-imgs img:first-child { border-right: 2px solid var(--black); }
+.port-imgs.three img { width: 33.333%; }
+.port-imgs.three img:nth-child(2) { border-right: 2px solid var(--black); }
+.port-imgs.single img { width: 100%; border-right: none; }
+.port-card:hover .port-imgs img { transform: scale(1.06); }
+.port-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(200,16,46,0.85), rgba(10,10,10,0.6));
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.3s;
+}
+.port-card:hover .port-overlay { opacity: 1; }
+.port-cta {
+  color: #fff; font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  border: 2px solid rgba(255,255,255,0.6); padding: 10px 24px; border-radius: 2px;
+}
+.port-body { padding: 24px 26px; }
+.port-cat {
+  font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--red); font-weight: 600; margin-bottom: 8px;
+}
+.port-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem; font-weight: 700; margin-bottom: 10px;
+}
+.port-desc { font-size: 0.88rem; color: #aaa; line-height: 1.7; }
+.port-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border);
+}
+.port-link { font-size: 0.78rem; color: var(--red); font-weight: 600; letter-spacing: 0.06em; }
+.port-arrow { font-size: 1.1rem; color: var(--red); }
+
+/* ══════════════════════════════════════════
+   PAGE 5 — CV
+══════════════════════════════════════════ */
+#page-cv { background: var(--black); }
+.cv-shell {
+  background: var(--dark2); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+  display: grid; grid-template-columns: 260px 1fr;
+  box-shadow: var(--shadow);
+}
+/* CV Left */
+.cv-left {
+  background: var(--red);
+  padding: 40px 28px; display: flex; flex-direction: column; gap: 28px;
+}
+.cv-photo-wrap { text-align: center; }
+.cv-photo {
+  width: 110px; height: 110px; border-radius: 50%;
+  object-fit: cover; object-position: top center;
+  border: 3px solid rgba(255,255,255,0.35);
+  margin-bottom: 14px;
+}
+.cv-name-l {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem; font-weight: 900; color: #fff; text-align: center; line-height: 1.2;
+}
+.cv-role-l { font-size: 0.72rem; color: rgba(255,255,255,0.7); text-align: center; margin-top: 6px; letter-spacing: 0.06em; }
+.cv-sep { height: 1px; background: rgba(255,255,255,0.2); }
+.cv-sec-head { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.55); font-weight: 700; margin-bottom: 14px; }
+
+/* CV Skills (left sidebar) */
+.cv-skill-list { display: flex; flex-direction: column; gap: 16px; }
+.cv-skill-row {}
+.cv-skill-top { display: flex; justify-content: space-between; margin-bottom: 7px; }
+.cv-skill-name { font-size: 0.78rem; color: rgba(255,255,255,0.9); font-weight: 500; }
+.cv-skill-pct { font-size: 0.72rem; color: rgba(255,255,255,0.55); }
+.cv-track { height: 4px; background: rgba(255,255,255,0.2); border-radius: 99px; overflow: hidden; }
+.cv-bar {
+  height: 100%; border-radius: 99px; width: 0;
+  background: rgba(255,255,255,0.85);
+  transition: width 1.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.cv-quote-box {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem; font-style: italic;
+  color: rgba(255,255,255,0.8); line-height: 1.55; text-align: center;
+  padding-top: 8px;
+}
+.cv-quote-box::before { content: '\201C'; display: block; font-size: 2rem; color: rgba(255,255,255,0.3); line-height: 1; margin-bottom: 4px; }
+
+/* CV Right */
+.cv-right { padding: 40px 36px; background: var(--white); color: var(--black); }
+.cv-r-section { margin-bottom: 30px; }
+.cv-r-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem; font-weight: 900; color: var(--black);
+  padding-bottom: 8px; border-bottom: 2px solid var(--red);
+  margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+}
+.cv-r-title span { font-size: 1rem; }
+.cv-desc-r { font-size: 0.88rem; color: #555; line-height: 1.8; }
+.cv-edu-list { display: flex; flex-direction: column; gap: 12px; }
+.cv-edu-r { display: flex; gap: 12px; align-items: flex-start; }
+.cv-edu-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); margin-top: 5px; flex-shrink: 0; }
+.cv-edu-n { font-size: 0.9rem; font-weight: 600; color: var(--black); }
+.cv-edu-y { font-size: 0.74rem; color: var(--red); margin-top: 2px; }
+.cv-exp-note {
+  font-size: 0.85rem; color: #777; font-style: italic;
+  padding: 14px 18px; background: #f9f9f9; border-left: 3px solid var(--red); border-radius: 4px;
+}
+.cv-btns-r { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-red-sm {
+  display: inline-block;
+  background: var(--red); color: #fff;
+  border-radius: 4px; padding: 10px 22px;
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  text-decoration: none; transition: background 0.2s, transform 0.2s;
+}
+.btn-red-sm:hover { background: var(--red2); transform: translateY(-2px); }
+.btn-brd-sm {
+  display: inline-block;
+  background: transparent; color: var(--black);
+  border: 1.5px solid #ccc; border-radius: 4px;
+  padding: 9px 20px; font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  text-decoration: none; transition: all 0.2s;
+}
+.btn-brd-sm:hover { border-color: var(--red); color: var(--red); transform: translateY(-2px); }
+
+/* ══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════ */
+footer {
+  text-align: center; padding: 28px 32px;
+  font-size: 0.8rem; color: var(--gray2);
+  border-top: 1px solid var(--border);
+  background: var(--dark);
+}
+footer strong { color: var(--red); }
+.footer-socials { display: flex; justify-content: center; gap: 14px; margin-top: 12px; }
+.footer-socials a {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid var(--border);
+  color: var(--gray); transition: color 0.2s, border-color 0.2s, transform 0.2s;
+}
+.footer-socials a:hover { color: var(--white); border-color: var(--red); transform: translateY(-3px); }
+.footer-socials svg { width: 18px; height: 18px; fill: currentColor; }
+
+/* ══════════════════════════════════════════
+   REVEAL
+══════════════════════════════════════════ */
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal.visible { opacity: 1; transform: none; }
+.reveal.d1 { transition-delay: 0.1s; }
+.reveal.d2 { transition-delay: 0.2s; }
+.reveal.d3 { transition-delay: 0.3s; }
+.reveal.d4 { transition-delay: 0.4s; }
+
+/* ══════════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeLeft {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .home-grid { grid-template-columns: 1fr; }
+  .home-photo-side { order: -1; }
+  .photo-box { width: 260px; height: 320px; }
+  .home-stats { gap: 24px; }
+  .skills-layout { grid-template-columns: 1fr; gap: 40px; }
+  .about-layout { grid-template-columns: 1fr; }
+  .about-card.full { grid-column: span 1; }
+  .portfolio-grid { grid-template-columns: 1fr; }
+  .cv-shell { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex; flex-direction: column; gap: 0;
+    position: fixed; top: 68px; left: 0; right: 0;
+    background: rgba(10,10,10,0.98); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 0;
+  }
+  .nav-links.open a { border-radius: 0; padding: 14px 32px; }
+  .burger { display: flex; }
+  .section-wrap { padding: 56px 20px 60px; }
+  .home-grid { padding: 48px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════ NAVBAR ════════════ -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#" onclick="showPage('home',this);return false;">H<em>.</em>Favian</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a class="active" onclick="showPage('home',this)">Home</a></li>
+      <li><a onclick="showPage('about',this)">About Me</a></li>
+      <li><a onclick="showPage('skills',this)">Skills</a></li>
+      <li><a onclick="showPage('portfolio',this)">Portfolio</a></li>
+      <li><a onclick="showPage('cv',this)">CV</a></li>
+    </ul>
+    <button class="burger" id="burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ════════════ PAGE: HOME ════════════ -->
+<div class="page active" id="page-home">
+  <div class="home-bg-circle"></div>
+  <div class="home-grid">
+    <div class="home-text">
+      <div class="home-tag">Personal Portfolio</div>
+      <h1 class="home-name">
+        <span class="stroke">Hanif</span><br>
+        <span class="red">Favian</span>
+      </h1>
+      <p class="home-tagline">Interested in Web Developers</p>
+      <div class="home-divider"></div>
+      <p class="home-desc">I'm someone interested in coding and UI/UX, especially in web development. I also love music a lot. Music is my companion whenever I'm studying.</p>
+      <div class="home-btns">
+        <a class="btn-red" onclick="showPage('portfolio', document.querySelector('.nav-links a:nth-child(4) a'))">View Portfolio</a>
+        <a class="btn-outline" onclick="showPage('about', null)">About Me</a>
+      </div>
+      <div class="home-stats">
+        <div>
+          <div class="stat-num">5+</div>
+          <div class="stat-label">Active Skills</div>
+        </div>
+        <div>
+          <div class="stat-num">5+</div>
+          <div class="stat-label">Projects</div>
+        </div>
+        <div>
+          <div class="stat-num">2024</div>
+          <div class="stat-label">Started Learning</div>
+        </div>
+      </div>
+    </div>
+    <div class="home-photo-side">
+      <div class="photo-box">
+        <img src="https://imgur.com/4IrgDGt.jpeg" alt="Hanif Favian">
+        <a href="https://smkn7semarang.sch.id/" target="_blank" class="photo-badge" style="text-decoration:none;">📍 SMK Negeri 7 Semarang</a>
+      </div>
+    </div>
+  </div>
+  <footer>© 2026 <strong>Hanif Favian</strong>. All rights reserved.<div class="footer-socials"><a href="https://s.id/Q8vS3" target="_blank" title="Instagram"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a><a href="https://s.id/5T3Fr" target="_blank" title="WhatsApp"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a></div></footer>
+</div>
+
+<!-- ════════════ PAGE: ABOUT ════════════ -->
+<div class="page" id="page-about">
+  <div class="section-wrap">
+    <span class="label reveal">Who I Am</span>
+    <h2 class="section-title reveal">About <em>Me</em></h2>
+    <div class="about-layout">
+      <div class="about-card reveal d1">
+        <div class="card-icon-wrap">👨‍👩‍👦</div>
+        <div class="card-label">Family Background</div>
+        <div class="card-body">I'm an <strong>only child</strong>. My father works as a <strong>boarding house caretaker</strong> and my mother is a <strong>homemaker</strong>.</div>
+      </div>
+      <div class="about-card reveal d2">
+        <div class="card-icon-wrap">🎮</div>
+        <div class="card-label">Hobbies</div>
+        <div class="card-body"><strong>Playing games</strong>, reading books, and reading webtoons.</div>
+      </div>
+      <div class="about-card full reveal d1">
+        <div class="card-icon-wrap">🎓</div>
+        <div class="card-label">Education History</div>
+        <div class="edu-list">
+          <div class="edu-row">
+            <div class="edu-dot"></div>
+            <div><div class="edu-year">2013</div><div class="edu-name">TK Trisula</div></div>
+          </div>
+          <div class="edu-row">
+            <div class="edu-dot"></div>
+            <div><div class="edu-year">2015</div><div class="edu-name">MI Taufiqiyah</div></div>
+          </div>
+          <div class="edu-row">
+            <div class="edu-dot"></div>
+            <div><div class="edu-year">2021</div><div class="edu-name">SMPN 9 Semarang</div></div>
+          </div>
+          <div class="edu-row">
+            <div class="edu-dot"></div>
+            <div><div class="edu-year">2024 – Present</div><div class="edu-name">SMKN 7 Semarang — SIJA Major</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="about-card reveal d2">
+        <div class="card-icon-wrap">💡</div>
+        <div class="card-label">Interests</div>
+        <div class="card-body">Website development, especially <strong>UI/UX</strong></div>
+      </div>
+      <div class="about-card reveal d3">
+        <div class="card-icon-wrap">🌟</div>
+        <div class="card-label">Aspirations</div>
+        <div class="card-body">Work from home, have <strong>one wife</strong> and <strong>two children</strong>.</div>
+      </div>
+      <div class="about-card reveal d1">
+        <div class="card-icon-wrap">🧠</div>
+        <div class="card-label">Soft Skills</div>
+        <div class="card-body">Quick to <strong>understand and memorize</strong>, good communication.</div>
+      </div>
+      <div class="about-card reveal d2">
+        <div class="card-icon-wrap">🛠️</div>
+        <div class="card-label">Hard Skills</div>
+        <div class="card-body"><strong>Canva</strong> design and <strong>AI Prompting</strong></div>
+      </div>
+    </div>
+  </div>
+  <footer>© 2026 <strong>Hanif Favian</strong>. All rights reserved.<div class="footer-socials"><a href="https://s.id/Q8vS3" target="_blank" title="Instagram"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a><a href="https://s.id/5T3Fr" target="_blank" title="WhatsApp"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a></div></footer>
+</div>
+
+<!-- ════════════ PAGE: SKILLS ════════════ -->
+<div class="page" id="page-skills">
+  <div class="section-wrap">
+    <span class="label reveal">My Abilities</span>
+    <h2 class="section-title reveal">Skills &amp; <em>Technology</em></h2>
+    <div class="skills-layout">
+      <div class="skills-intro">
+        <p class="intro-text reveal d1">I keep learning and developing my abilities in web development and design. Every day is a chance to grow and sharpen new skills.</p>
+        <p class="intro-text reveal d2">Here's an overview of my current technical abilities, which keep growing as I continue learning at SMKN 7 Semarang.</p>
+        <div class="accent-box reveal d3">"Surpass every limit and reach the peak"</div>
+      </div>
+      <div class="skill-list" id="skillBars">
+        <div class="skill-row reveal d1">
+          <div class="skill-top">
+            <span class="skill-name">HTML</span>
+            <span class="skill-num" data-target="50">0%</span>
+          </div>
+          <div class="skill-track">
+            <div class="skill-fill" data-width="50"></div>
+          </div>
+        </div>
+        <div class="skill-row reveal d2">
+          <div class="skill-top">
+            <span class="skill-name">CSS</span>
+            <span class="skill-num" data-target="50">0%</span>
+          </div>
+          <div class="skill-track">
+            <div class="skill-fill" data-width="50"></div>
+          </div>
+        </div>
+        <div class="skill-row reveal d3">
+          <div class="skill-top">
+            <span class="skill-name">JavaScript</span>
+            <span class="skill-num" data-target="30">0%</span>
+          </div>
+          <div class="skill-track">
+            <div class="skill-fill" data-width="30"></div>
+          </div>
+        </div>
+        <div class="skill-row reveal d4">
+          <div class="skill-top">
+            <span class="skill-name">Cisco Packet Tracer</span>
+            <span class="skill-num" data-target="85">0%</span>
+          </div>
+          <div class="skill-track">
+            <div class="skill-fill" data-width="85"></div>
+          </div>
+        </div>
+        <div class="skill-row reveal d1">
+          <div class="skill-top">
+            <span class="skill-name">Editing (Canva, etc.)</span>
+            <span class="skill-num" data-target="80">0%</span>
+          </div>
+          <div class="skill-track">
+            <div class="skill-fill" data-width="80"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>© 2026 <strong>Hanif Favian</strong>. All rights reserved.<div class="footer-socials"><a href="https://s.id/Q8vS3" target="_blank" title="Instagram"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a><a href="https://s.id/5T3Fr" target="_blank" title="WhatsApp"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a></div></footer>
+</div>
+
+<!-- ════════════ PAGE: PORTFOLIO ════════════ -->
+<div class="page" id="page-portfolio">
+  <div class="section-wrap">
+    <span class="label reveal">My Work</span>
+    <h2 class="section-title reveal">Port<em>folio</em></h2>
+    <div class="portfolio-grid">
+      <a href="https://canva.link/o5447t08u8gosr4" target="_blank" class="port-card reveal d1">
+        <div class="port-imgs three">
+          <img src="https://i.imgur.com/9JceSZ0.jpeg" alt="Mug 1"
+               onerror="this.style.background='#1a1a1a'">
+          <img src="https://i.imgur.com/75qBq8z.jpeg" alt="Mug 2"
+               onerror="this.style.background='#222'">
+          <img src="https://i.imgur.com/kZijjj4.jpeg" alt="Mug 3"
+               onerror="this.style.background='#2a2a2a'">
+          <div class="port-overlay"><span class="port-cta">View Project →</span></div>
+        </div>
+        <div class="port-body">
+          <div class="port-cat">Canva · Graphic Design</div>
+          <div class="port-title">Mug Design</div>
+          <p class="port-desc">Designed a mug based on a favorite manga/anime for a major-related assignment. Made using Canva with a chosen anime theme.</p>
+          <div class="port-footer">
+            <span class="port-link">canva.link →</span>
+            <span class="port-arrow">↗</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="https://cisc.gamer.gd/?i=1" target="_blank" class="port-card reveal d2">
+        <div class="port-imgs single"> 
+               <img src="https://imgur.com/aqzGSeP.jpg" alt="Group website">
+          <div class="port-overlay"><span class="port-cta">View Project →</span></div>
+        </div>
+        <div class="port-body">
+          <div class="port-cat">HTML · CSS · Web Development</div>
+          <div class="port-title">Group Website</div>
+          <p class="port-desc">A group website built together as a collaborative project. Accessible and viewable online.</p>
+          <div class="port-footer">
+            <span class="port-link">cisc.gamer.gd →</span>
+            <span class="port-arrow">↗</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="https://ambamath.page.gd" target="_blank" class="port-card reveal d3">
+        <div class="port-imgs single">
+          <img src="https://i.imgur.com/USusFgA.jpg" alt="Math Website"
+               onerror="this.style.background='#2a2a2a'">
+          <div class="port-overlay"><span class="port-cta">View Project →</span></div>
+        </div>
+        <div class="port-body">
+          <div class="port-cat">HTML · CSS · Web Development</div>
+          <div class="port-title">Math Website</div>
+          <p class="port-desc">Assignment to build a Math Website covering material on circles/geometry.</p>
+          <div class="port-footer">
+            <span class="port-link">ambamath.page.gd →</span>
+            <span class="port-arrow">↗</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="https://konstitusi-reformasi-oty1.arcada.app" target="_blank" class="port-card reveal d4">
+        <div class="port-imgs single">
+          <img src="https://i.imgur.com/3oxNURi.jpg" alt="History Website"
+               onerror="this.style.background='#2a2a2a'">
+          <div class="port-overlay"><span class="port-cta">View Project →</span></div>
+        </div>
+        <div class="port-body">
+          <div class="port-cat">HTML · CSS · Web Development</div>
+          <div class="port-title">History Website (Group Project)</div>
+          <p class="port-desc">History assignment covering the transition from the New Order era to Reformation.</p>
+          <div class="port-footer">
+            <span class="port-link">konstitusi-reformasi →</span>
+            <span class="port-arrow">↗</span>
+          </div>
+        </div>
+      </a>
+    </div>
+    <!-- Cisco Award centered below -->
+    <div style="display:flex;justify-content:center;margin-top:28px;">
+      <a href="https://www.netacad.com/profile?tab=badges" target="_blank" class="port-card reveal d1" style="max-width:480px;width:100%;">
+        <div class="port-imgs single">
+          <img src="https://i.imgur.com/mkzIJLt.jpeg" alt="Cisco Award"
+               onerror="this.style.background='#1a1a1a'">
+          <div class="port-overlay"><span class="port-cta">View Badge →</span></div>
+        </div>
+        <div class="port-body">
+          <div class="port-cat">Cisco · Networking Academy</div>
+          <div class="port-title">Cisco Award</div>
+          <p class="port-desc">Completed all the Cisco essentials assigned by Mr. Hari and finished them in under 1 month.</p>
+          <div class="port-footer">
+            <span class="port-link">netacad.com →</span>
+            <span class="port-arrow">↗</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <footer>© 2026 <strong>Hanif Favian</strong>. All rights reserved.<div class="footer-socials"><a href="https://s.id/Q8vS3" target="_blank" title="Instagram"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a><a href="https://s.id/5T3Fr" target="_blank" title="WhatsApp"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a></div></footer>
+</div>
+
+<!-- ════════════ PAGE: CV ════════════ -->
+<div class="page" id="page-cv">
+  <div class="section-wrap">
+    <span class="label reveal">Professional Resume</span>
+    <h2 class="section-title reveal">Curriculum <em>Vitae</em></h2>
+    <div class="cv-shell reveal d1">
+      <!-- LEFT SIDEBAR -->
+      <div class="cv-left">
+        <div class="cv-photo-wrap">
+          <img src="https://i.imgur.com/n1Qkm6P.jpeg" alt="Hanif Favian" class="cv-photo"
+               onerror="this.src='https://i.imgur.com/n1Qkm6P.jpeg'">
+          <div class="cv-name-l">Hanif Favian</div>
+          <div class="cv-role-l">Interested Web Developers</div>
+        </div>
+        <div class="cv-sep"></div>
+        <div>
+          <div class="cv-sec-head">Soft Skills</div>
+          <div class="cv-skill-list" id="cvSkillBars">
+            <div class="cv-skill-row">
+              <div class="cv-skill-top">
+                <span class="cv-skill-name">Communication</span>
+                <span class="cv-skill-pct">90%</span>
+              </div>
+              <div class="cv-track"><div class="cv-bar" data-width="90"></div></div>
+            </div>
+            <div class="cv-skill-row">
+              <div class="cv-skill-top">
+                <span class="cv-skill-name">Problem Solving</span>
+                <span class="cv-skill-pct">90%</span>
+              </div>
+              <div class="cv-track"><div class="cv-bar" data-width="90"></div></div>
+            </div>
+            <div class="cv-skill-row">
+              <div class="cv-skill-top">
+                <span class="cv-skill-name">Creativity</span>
+                <span class="cv-skill-pct">90%</span>
+              </div>
+              <div class="cv-track"><div class="cv-bar" data-width="90"></div></div>
+            </div>
+            <div class="cv-skill-row">
+              <div class="cv-skill-top">
+                <span class="cv-skill-name">Time Management</span>
+                <span class="cv-skill-pct">90%</span>
+              </div>
+              <div class="cv-track"><div class="cv-bar" data-width="90"></div></div>
+            </div>
+            <div class="cv-skill-row">
+              <div class="cv-skill-top">
+                <span class="cv-skill-name">Adaptability</span>
+                <span class="cv-skill-pct">90%</span>
+              </div>
+              <div class="cv-track"><div class="cv-bar" data-width="90"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="cv-sep"></div>
+        <div class="cv-quote-box">Surpass every limit and reach the peak</div>
+      </div>
+      <!-- RIGHT MAIN -->
+      <div class="cv-right">
+        <div class="cv-r-section">
+          <div class="cv-r-title"><span>👤</span> About Me</div>
+          <p class="cv-desc-r">Interested in coding and web development, especially UI/UX. Enjoy playing games and reading — both books and webtoons. Music always accompanies me while learning and creating.</p>
+        </div>
+        <div class="cv-r-section">
+          <div class="cv-r-title"><span>🎓</span> Education</div>
+          <div class="cv-edu-list">
+            <div class="cv-edu-r"><div class="cv-edu-dot"></div><div><div class="cv-edu-n">SMKN 7 Semarang — SIJA Major</div><div class="cv-edu-y">2024 – Present</div></div></div>
+            <div class="cv-edu-r"><div class="cv-edu-dot"></div><div><div class="cv-edu-n">SMPN 9 Semarang</div><div class="cv-edu-y">2021 – 2024</div></div></div>
+            <div class="cv-edu-r"><div class="cv-edu-dot"></div><div><div class="cv-edu-n">MI Taufiqiyah</div><div class="cv-edu-y">2015 – 2021</div></div></div>
+            <div class="cv-edu-r"><div class="cv-edu-dot"></div><div><div class="cv-edu-n">TK Trisula</div><div class="cv-edu-y">2013 – 2015</div></div></div>
+          </div>
+        </div>
+        <div class="cv-r-section">
+          <div class="cv-r-title"><span>💼</span> Experience</div>
+          <div class="cv-exp-note">Currently still actively learning. First project: Manga/anime-based Mug Design — a major-related assignment at SMKN 7 Semarang.</div>
+        </div>
+        <div class="cv-r-section">
+          <div class="cv-btns-r">
+            <a href="https://canva.link/o5447t08u8gosr4" target="_blank" class="btn-red-sm">View Portfolio</a>
+            <a href="https://s.id/5T3Fr" target="_blank" class="btn-brd-sm">Contact</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>© 2026 <strong>Hanif Favian</strong>. All rights reserved.<div class="footer-socials"><a href="https://s.id/Q8vS3" target="_blank" title="Instagram"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a><a href="https://s.id/5T3Fr" target="_blank" title="WhatsApp"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a></div></footer>
+</div>
+
+<script>
+/* ════════ PAGE NAVIGATION ════════ */
+function showPage(id, clickedEl) {
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  // Show target page
+  const target = document.getElementById('page-' + id);
+  if (target) target.classList.add('active');
+
+  // Update nav active state
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  // Find nav link by order
+  const pageOrder = ['home','about','skills','portfolio','cv'];
+  const idx = pageOrder.indexOf(id);
+  const allLinks = document.querySelectorAll('.nav-links a');
+  if (allLinks[idx]) allLinks[idx].classList.add('active');
+
+  // Reset & trigger animations for the new page
+  window.scrollTo(0, 0);
+  setTimeout(() => {
+    initReveals(target);
+    if (id === 'skills') animateSkillBars();
+    if (id === 'cv')     animateCvBars();
+  }, 60);
+
+  // Close burger menu
+  document.getElementById('navLinks').classList.remove('open');
+}
+
+/* ════════ REVEAL ON PAGE LOAD ════════ */
+function initReveals(container) {
+  const els = container.querySelectorAll('.reveal');
+  els.forEach(el => el.classList.remove('visible'));
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  // Force first-visible immediately for elements already in view
+  setTimeout(() => els.forEach(el => obs.observe(el)), 10);
+}
+
+/* ════════ SKILL BAR ANIMATION — Skills Page ════════ */
+function animateSkillBars() {
+  const bars = document.querySelectorAll('#skillBars .skill-fill');
+  const nums = document.querySelectorAll('#skillBars .skill-num');
+
+  bars.forEach((bar, i) => {
+    const target = parseInt(bar.dataset.width);
+    bar.style.width = '0';
+    const num = nums[i];
+    if (num) num.textContent = '0%';
+
+    setTimeout(() => {
+      bar.style.width = target + '%';
+      bar.classList.add('animated');
+      // Count-up animation for numbers
+      if (num) {
+        let start = 0;
+        const duration = 1400;
+        const step = (timestamp) => {
+          if (!start) start = timestamp;
+          const progress = Math.min((timestamp - start) / duration, 1);
+          const ease = 1 - Math.pow(1 - progress, 3);
+          num.textContent = Math.floor(ease * target) + '%';
+          if (progress < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }
+    }, 200 + i * 120);
+  });
+}
+
+/* ════════ SKILL BAR ANIMATION — CV Page ════════ */
+function animateCvBars() {
+  const bars = document.querySelectorAll('#cvSkillBars .cv-bar');
+  bars.forEach((bar, i) => {
+    const target = parseInt(bar.dataset.width);
+    bar.style.width = '0';
+    setTimeout(() => {
+      bar.style.width = target + '%';
+    }, 400 + i * 140);
+  });
+}
+
+/* ════════ BURGER MENU ════════ */
+document.getElementById('burger').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+/* ════════ INIT HOME PAGE ════════ */
+window.addEventListener('DOMContentLoaded', () => {
+  const home = document.getElementById('page-home');
+  initReveals(home);
+
+  // ── Split home-name letters for wave animation ──
+  document.querySelectorAll('.home-name span').forEach(span => {
+    const text = span.textContent;
+    span.innerHTML = text.split('').map(c =>
+      c === ' ' ? ' ' : `<span class="char">${c}</span>`
+    ).join('');
+  });
+
+  // ── Click wave trigger on home-name ──
+  document.querySelector('.home-name').addEventListener('click', function(e) {
+    const chars = this.querySelectorAll('.char');
+    chars.forEach((c, i) => {
+      c.classList.remove('wave');
+      setTimeout(() => c.classList.add('wave'), i * 60);
+      setTimeout(() => c.classList.remove('wave'), i * 60 + 800);
+    });
+  });
+
+  // ── Custom Cursor — Crosshair + Magnetic Orb + Sparks ──
+  const cross  = document.getElementById('cursorCross');
+  const orb    = document.getElementById('cursorOrb');
+
+  let mx = -200, my = -200;
+  let ox = -200, oy = -200;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cross.style.left  = mx + 'px';
+    cross.style.top   = my + 'px';
+    spawnSpark(mx, my);
+  });
+
+  // orb follows with smooth lag via rAF
+  (function loopOrb() {
+    ox += (mx - ox) * 0.11;
+    oy += (my - oy) * 0.11;
+    orb.style.left = ox + 'px';
+    orb.style.top  = oy + 'px';
+    requestAnimationFrame(loopOrb);
+  })();
+
+  // hover enlargement
+  document.querySelectorAll('a, button, .port-card, .about-card, .nav-links a, .btn-red, .btn-outline').forEach(el => {
+    el.addEventListener('mouseenter', () => orb.classList.add('hover'));
+    el.addEventListener('mouseleave', () => orb.classList.remove('hover'));
+  });
+
+  // click burst sparks
+  document.addEventListener('click', e => {
+    for (let i = 0; i < 8; i++) spawnBurst(e.clientX, e.clientY);
+  });
+
+  // spark trail
+  let lastSpark = 0;
+  function spawnSpark(x, y) {
+    const now = Date.now();
+    if (now - lastSpark < 40) return;
+    lastSpark = now;
+    const s = document.createElement('div');
+    s.className = 'cur-spark';
+    const size = 3 + Math.random() * 3;
+    s.style.cssText = `left:${x}px;top:${y}px;width:${size}px;height:${size}px;opacity:0.55;transition:opacity 0.5s,width 0.5s,height 0.5s;`;
+    document.body.appendChild(s);
+    requestAnimationFrame(() => {
+      s.style.opacity = '0';
+      s.style.width = '1px';
+      s.style.height = '1px';
+    });
+    setTimeout(() => s.remove(), 520);
+  }
+
+  // burst on click
+  function spawnBurst(x, y) {
+    const s = document.createElement('div');
+    s.className = 'cur-spark';
+    const angle = Math.random() * Math.PI * 2;
+    const dist  = 20 + Math.random() * 30;
+    const dx = Math.cos(angle) * dist;
+    const dy = Math.sin(angle) * dist;
+    const size = 4 + Math.random() * 4;
+    s.style.cssText = `left:${x}px;top:${y}px;width:${size}px;height:${size}px;opacity:0.9;transition:left 0.5s ease-out,top 0.5s ease-out,opacity 0.5s,width 0.4s,height 0.4s;`;
+    document.body.appendChild(s);
+    requestAnimationFrame(() => {
+      s.style.left = (x + dx) + 'px';
+      s.style.top  = (y + dy) + 'px';
+      s.style.opacity = '0';
+      s.style.width = '2px';
+      s.style.height = '2px';
+    });
+    setTimeout(() => s.remove(), 550);
+  }
+});
+</script>
+
+<!-- Custom Cursor Elements -->
+<div class="cur-cross"  id="cursorCross"></div>
+
+<div class="cur-orb"    id="cursorOrb"></div>
+</body>
+</html>
